@@ -289,12 +289,17 @@ function addTyping() {
 
 function scroll() { stream.scrollTop = stream.scrollHeight; }
 
-// Lleva la vista para que el INICIO del elemento quede visible arriba del stream.
+// Lleva la vista al INICIO del mensaje del bot (robusto en movil).
+// Guarda el elemento para re-alinear cuando se agreguen tarjetas despues.
+let ultimoBotEl = null;
 function scrollAInicio(el) {
+  ultimoBotEl = el;
+  alinearBot();
+}
+function alinearBot() {
+  if (!ultimoBotEl) return;
   requestAnimationFrame(() => {
-    // offsetTop del elemento relativo al contenedor scrollable
-    const top = el.offsetTop - 8;
-    stream.scrollTo({ top: top < 0 ? 0 : top, behavior: 'smooth' });
+    ultimoBotEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
@@ -380,7 +385,7 @@ function renderEstimacion(bubble, est) {
       ${tablaHospitales(est)}`;
     bubble.appendChild(cont);
     animarBarras();
-    scrollAInicio(bubble);
+    setTimeout(alinearBot, 60);
     return;
   }
 
@@ -441,7 +446,7 @@ function renderEstimacion(bubble, est) {
 
   bubble.appendChild(cont);
   animarBarras();
-  scrollAInicio(bubble);
+  setTimeout(alinearBot, 60);
 
   // Boton "copiar resumen para llevar"
   const btnResumen = cont.querySelector('[data-resumen]');
