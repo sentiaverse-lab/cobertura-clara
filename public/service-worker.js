@@ -4,13 +4,13 @@
  *  - Llamadas a /api/*: SIEMPRE a la red (network-only). Nunca datos medicos cacheados.
  */
 
-const CACHE = 'vielsin-v9';
+const CACHE = 'vielsin-v10';
 const ASSETS = [
   '/',
   '/index.html',
-  '/app.js?v=9',
-  '/i18n.js?v=9',
-  '/device-ai.js?v=9',
+  '/app.js?v=10',
+  '/i18n.js?v=10',
+  '/device-ai.js?v=10',
   '/vielsin-avatar.svg',
   '/manifest.json',
   '/icon-192.png',

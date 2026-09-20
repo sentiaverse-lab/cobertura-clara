@@ -1,6 +1,6 @@
 {
-  "name": "Vielsin · Cobertura Clara",
-  "short_name": "Vielsin",
+  "name": "Cobertura Clara",
+  "short_name": "Cobertura Clara",
   "description": "Estima tu copago y encuentra el hospital de tu red que más te conviene, antes de atenderte.",
   "start_url": "/",
   "display": "standalone",

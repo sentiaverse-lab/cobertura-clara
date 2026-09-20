@@ -57,7 +57,10 @@ async function init() {
   if (micBtn) micBtn.addEventListener('click', dictar);
 
   const langBtn = document.querySelector('#langBtn');
-  if (langBtn) langBtn.addEventListener('click', cambiarIdioma);
+  if (langBtn) {
+    langBtn.addEventListener('click', cambiarIdioma);
+    langBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cambiarIdioma(); } });
+  }
 
   aplicarIdioma();      // traduce la UI estatica al idioma detectado
   addBot(t('greeting')); // saludo inicial
@@ -112,14 +115,14 @@ function aplicarIdioma() {
   const voiceBtn = document.querySelector('#voiceBtn'); if (voiceBtn) voiceBtn.title = t('voiceTitle');
   const micBtn = document.querySelector('#micBtn'); if (micBtn) micBtn.title = t('micTitle');
   const planSel = document.querySelector('#planSelect option[value=""]'); if (planSel) planSel.textContent = t('planPlaceholder');
-  // Interruptor ES | EN con el idioma ACTUAL resaltado
+  // Interruptor tipo pastilla: ES / EN con el activo en fondo teal
   const langLabel = document.querySelector('#langLabel');
   if (langLabel) {
     const es = getLang() === 'es';
+    const on = 'px-3 py-1 rounded-full bg-teal-400 text-slate-900';
+    const off = 'px-3 py-1 rounded-full text-slate-400';
     langLabel.innerHTML =
-      `<span class="${es ? 'text-teal-300' : 'text-slate-500'}">ES</span>` +
-      `<span class="text-slate-600 mx-0.5">|</span>` +
-      `<span class="${!es ? 'text-teal-300' : 'text-slate-500'}">EN</span>`;
+      `<span class="${es ? on : off}">ES</span><span class="${!es ? on : off}">EN</span>`;
   }
 }
 
