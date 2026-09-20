@@ -256,9 +256,11 @@ function addChips() {
   const wrap = document.createElement('div');
   wrap.id = 'chipsWrap';
   wrap.className = 'flex flex-wrap gap-2 pl-10 fade-up';
-  (t('examples') || []).forEach((ej) => {
+  (t('examples') || []).forEach((ej, i) => {
     const b = document.createElement('button');
-    b.className = 'text-[11px] px-2.5 py-1 rounded-full bg-slate-900/70 border border-white/10 text-slate-400 hover:text-teal-300 hover:border-teal-400/40 transition';
+    // En movil mostramos solo los 2 primeros; los otros aparecen en pantallas grandes.
+    const ocultoMovil = i >= 2 ? ' hidden sm:inline-block' : '';
+    b.className = 'text-[11px] px-2.5 py-1 rounded-full bg-slate-900/70 border border-white/10 text-slate-400 hover:text-teal-300 hover:border-teal-400/40 transition' + ocultoMovil;
     b.textContent = ej;
     b.onclick = () => { input.value = ej; input.focus(); autosize(); };
     wrap.appendChild(b);
