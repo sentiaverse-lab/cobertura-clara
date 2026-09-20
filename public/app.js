@@ -11,6 +11,8 @@ const historial = [];              // [{role:'user'|'assistant', content}]
 let estado = { planId: '', especialidadId: '', urgencia: null };
 let ubicacion = null;              // { lat, lng } si el usuario la comparte (opt-in)
 let estadoUltimaEsp = '';          // nombre de la especialidad actual (para el mensaje de cita)
+let vozActiva = false;             // si el bot lee sus respuestas en voz alta (TTS)
+let reconociendo = false;          // si el dictado por voz esta activo (STT)
 
 const EJEMPLOS = [
   'Me duele el pecho al respirar',
@@ -49,6 +51,12 @@ async function init() {
 
   const geoBtn = document.querySelector('#geoBtn');
   if (geoBtn) geoBtn.addEventListener('click', pedirUbicacion);
+
+  const voiceBtn = document.querySelector('#voiceBtn');
+  if (voiceBtn) voiceBtn.addEventListener('click', toggleVoz);
+
+  const micBtn = document.querySelector('#micBtn');
+  if (micBtn) micBtn.addEventListener('click', dictar);
 
   // Saludo inicial + chips
   addBot('Hola 👋 Soy <strong class="text-teal-300">Vielsin</strong>, tu asistente de cobertura. Cuentame que sientes y tu plan de seguro, y te digo cuanto pagarias y que hospital de tu red te conviene mas.');
@@ -91,6 +99,63 @@ function pedirUbicacion() {
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
   );
+}
+
+// ── Audio: leer en voz alta (TTS) ───────────────────────────────────
+function toggleVoz() {
+  const icon = document.querySelector('#voiceIcon');
+  if (!('speechSynthesis' in window)) {
+    addBot('Tu navegador no soporta lectura por voz.');
+    return;
+  }
+  vozActiva = !vozActiva;
+  if (icon) icon.textContent = vozActiva ? '🔊' : '🔈';
+  if (!vozActiva) window.speechSynthesis.cancel();
+  else addBot('Activada la lectura en voz alta. Leere mis respuestas.');
+}
+
+function hablar(texto) {
+  if (!vozActiva || !('speechSynthesis' in window) || !texto) return;
+  // Quitar HTML por si acaso
+  const limpio = texto.replace(/<[^>]*>/g, '').slice(0, 400);
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(limpio);
+  u.lang = 'es-ES';
+  u.rate = 1.02;
+  u.pitch = 1.0;
+  window.speechSynthesis.speak(u);
+}
+
+// ── Audio: dictar por voz (STT) ─────────────────────────────────────
+function dictar() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = document.querySelector('#micBtn');
+  if (!SR) {
+    addBot('Tu navegador no soporta dictado por voz. Puedes escribir tu consulta.');
+    return;
+  }
+  if (reconociendo) return;
+
+  const rec = new SR();
+  rec.lang = 'es-ES';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+
+  reconociendo = true;
+  if (micBtn) { micBtn.textContent = '🔴'; micBtn.classList.add('animate-pulse'); }
+
+  rec.onresult = (e) => {
+    const texto = e.results[0][0].transcript;
+    input.value = input.value ? (input.value + ' ' + texto) : texto;
+    autosize();
+  };
+  rec.onerror = () => {};
+  rec.onend = () => {
+    reconociendo = false;
+    if (micBtn) { micBtn.textContent = '🎤'; micBtn.classList.remove('animate-pulse'); }
+    input.focus();
+  };
+  rec.start();
 }
 
 // ── Render de burbujas ──────────────────────────────────────────────
@@ -179,6 +244,7 @@ async function enviar() {
     }
     const bubble = addBot(html);
     historial.push({ role: 'assistant', content: r.responder });
+    hablar(r.responder);
 
     // Si hubo estimacion, insertar las tarjetas dentro del chat
     if (r.estimacion) {
@@ -224,6 +290,13 @@ function renderEstimacion(bubble, est) {
   const desgloseTxt = desglose.length ? `<p class="text-[11px] text-slate-500 mt-2">Como se calcula: ${desglose.join(' + ')}.</p>` : '';
 
   cont.innerHTML = `
+    <div class="rounded-2xl p-3 pop bg-teal-400/10 border border-teal-400/25 flex items-center gap-3">
+      <span class="text-xl">🩺</span>
+      <div>
+        <p class="text-[11px] text-slate-400 leading-tight">Especialidad sugerida</p>
+        <p class="text-base font-bold text-teal-200 leading-tight">${escapeHtml(est.especialidadNombre)}</p>
+      </div>
+    </div>
     <div class="rounded-2xl p-4 pop glow bg-slate-900/50 border border-white/10">
       <div class="flex items-start justify-between gap-3 flex-wrap">
         <div>

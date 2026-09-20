@@ -48,6 +48,10 @@
             class="flex items-center gap-1.5 bg-slate-900/70 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition">
             <span id="geoIcon">📍</span><span id="geoLabel" class="hidden sm:inline">Usar mi ubicacion</span>
           </button>
+          <button id="voiceBtn" title="Leer las respuestas en voz alta"
+            class="bg-slate-900/70 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition">
+            <span id="voiceIcon">🔈</span>
+          </button>
           <select id="planSelect" title="Atajo: fija tu plan"
             class="bg-slate-900/70 border border-white/10 rounded-xl px-2.5 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-teal-400/60">
             <option value="">Plan: preguntar en el chat</option>
@@ -62,8 +66,12 @@
     <!-- Barra de escritura (siempre activa) -->
     <footer class="shrink-0 pb-4 pt-2">
       <div class="glass rounded-2xl p-2 flex items-end gap-2">
-        <textarea id="input" rows="1" placeholder="Escribe aqui... ej: me duele el pecho al respirar, tengo Plan Plus"
+        <textarea id="input" rows="1" placeholder="Escribe o dicta... ej: me duele el pecho, tengo Plan Plus"
           class="flex-1 bg-transparent resize-none max-h-32 px-3 py-2.5 text-sm focus:outline-none placeholder:text-slate-500"></textarea>
+        <button id="micBtn" title="Dictar por voz"
+          class="shrink-0 w-11 h-11 rounded-xl bg-slate-800/70 border border-white/10 text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition flex items-center justify-center">
+          🎤
+        </button>
         <button id="sendBtn"
           class="shrink-0 w-11 h-11 rounded-xl bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-900 font-bold transition disabled:opacity-40 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>

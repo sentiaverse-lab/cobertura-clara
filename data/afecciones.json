@@ -1,0 +1,117 @@
+{
+  "descripcion": "Base de conocimiento de afecciones y motivos de consulta comunes. Mapea sintomas frecuentes a especialidad + urgencia + orientacion breve. Datos de demostracion; NO es diagnostico medico.",
+  "afecciones": [
+    {
+      "id": "dolor_toracico",
+      "nombre": "Dolor u opresion en el pecho",
+      "sintomas": ["dolor de pecho", "opresion en el pecho", "presion en el pecho", "punzada en el pecho", "dolor al corazon", "palpitaciones", "taquicardia", "corazon acelerado"],
+      "especialidad": "cardiologia",
+      "urgencia": "alta",
+      "orientacion": "El dolor de pecho puede tener causas variadas. Si es intenso, se irradia al brazo o viene con sudor y falta de aire, acude a urgencias de inmediato."
+    },
+    {
+      "id": "dificultad_respiratoria",
+      "nombre": "Dificultad para respirar",
+      "sintomas": ["falta de aire", "no puedo respirar", "dificultad para respirar", "ahogo", "me ahogo", "respiracion agitada", "silbido al respirar"],
+      "especialidad": "neumologia",
+      "urgencia": "alta",
+      "orientacion": "La dificultad respiratoria severa o repentina es una urgencia. Si es leve y persistente, valora una consulta con Neumologia."
+    },
+    {
+      "id": "tos_persistente",
+      "nombre": "Tos y congestion",
+      "sintomas": ["tos", "tos seca", "flema", "mocos", "congestion", "resfriado", "gripe", "catarro"],
+      "especialidad": "neumologia",
+      "urgencia": "baja",
+      "orientacion": "La tos aguda suele ser viral. Si dura mas de 3 semanas, hay sangre o fiebre alta, conviene evaluarla."
+    },
+    {
+      "id": "dolor_abdominal",
+      "nombre": "Dolor abdominal / digestivo",
+      "sintomas": ["dolor de estomago", "dolor abdominal", "dolor de barriga", "nausea", "vomito", "diarrea", "acidez", "gastritis", "indigestion", "colico"],
+      "especialidad": "gastroenterologia",
+      "urgencia": "media",
+      "orientacion": "El dolor abdominal intenso, con fiebre o vomito persistente, requiere atencion pronta. Casos leves los ve Gastroenterologia."
+    },
+    {
+      "id": "lesion_musculoesqueletica",
+      "nombre": "Golpe, fractura o dolor articular",
+      "sintomas": ["fractura", "hueso roto", "esguince", "torcedura", "dolor de rodilla", "dolor de espalda", "dolor de tobillo", "me cai", "golpe", "lesion", "no puedo mover"],
+      "especialidad": "traumatologia",
+      "urgencia": "media",
+      "orientacion": "Si hay deformidad, no puedes apoyar o el dolor es severo, acude a urgencias. Molestias leves las ve Traumatologia."
+    },
+    {
+      "id": "problema_piel",
+      "nombre": "Problemas de piel",
+      "sintomas": ["sarpullido", "roncha", "mancha en la piel", "comezon", "picazon", "acne", "granos", "lunar", "urticaria", "alergia en la piel"],
+      "especialidad": "dermatologia",
+      "urgencia": "baja",
+      "orientacion": "La mayoria de afecciones de piel no son urgentes. Si hay hinchazon de cara o dificultad para respirar (reaccion alergica), busca ayuda inmediata."
+    },
+    {
+      "id": "cefalea_neuro",
+      "nombre": "Dolor de cabeza / sintomas neurologicos",
+      "sintomas": ["dolor de cabeza", "migrana", "jaqueca", "mareo", "vertigo", "hormigueo", "adormecimiento", "convulsion", "desmayo", "vision borrosa", "no puedo hablar bien"],
+      "especialidad": "neurologia",
+      "urgencia": "alta",
+      "orientacion": "El peor dolor de cabeza de tu vida, con perdida de fuerza, habla o vision, puede ser urgente: acude a emergencias. Molestias recurrentes las ve Neurologia."
+    },
+    {
+      "id": "oido_garganta_nariz",
+      "nombre": "Oido, garganta o nariz",
+      "sintomas": ["dolor de oido", "dolor de garganta", "sinusitis", "ronquera", "amigdalas", "anginas", "tapado el oido", "no escucho bien"],
+      "especialidad": "otorrinolaringologia",
+      "urgencia": "baja",
+      "orientacion": "Molestias de oido, nariz y garganta suelen ser manejables. Si hay fiebre alta o dolor intenso persistente, conviene evaluarlas."
+    },
+    {
+      "id": "problema_visual",
+      "nombre": "Problemas de la vista",
+      "sintomas": ["dolor de ojo", "ojo rojo", "vision borrosa", "no veo bien", "conjuntivitis", "veo manchas", "ardor en los ojos", "lagrimeo"],
+      "especialidad": "oftalmologia",
+      "urgencia": "media",
+      "orientacion": "La perdida subita de vision o el dolor ocular intenso requieren atencion pronta. Molestias leves las ve Oftalmologia."
+    },
+    {
+      "id": "salud_femenina",
+      "nombre": "Salud ginecologica",
+      "sintomas": ["menstruacion", "regla dolorosa", "retraso menstrual", "embarazo", "dolor de ovarios", "flujo", "sangrado", "control ginecologico", "papanicolau"],
+      "especialidad": "ginecologia",
+      "urgencia": "media",
+      "orientacion": "El sangrado abundante o dolor pelvico intenso deben evaluarse pronto. Los controles y molestias comunes los ve Ginecologia."
+    },
+    {
+      "id": "salud_urinaria",
+      "nombre": "Sistema urinario",
+      "sintomas": ["ardor al orinar", "dolor al orinar", "infeccion urinaria", "sangre en la orina", "dolor de rinon", "prostata", "orino mucho", "no puedo orinar"],
+      "especialidad": "urologia",
+      "urgencia": "media",
+      "orientacion": "La imposibilidad de orinar o sangre en la orina requieren atencion pronta. Molestias urinarias comunes las ve Urologia."
+    },
+    {
+      "id": "metabolico_endocrino",
+      "nombre": "Azucar, tiroides y hormonas",
+      "sintomas": ["azucar alta", "diabetes", "tiroides", "hormonas", "mucha sed", "bajar de peso", "subir de peso", "cansancio constante"],
+      "especialidad": "endocrinologia",
+      "urgencia": "baja",
+      "orientacion": "Los trastornos metabolicos requieren seguimiento con Endocrinologia. Si hay confusion o desmayo por azucar, busca ayuda inmediata."
+    },
+    {
+      "id": "salud_mental",
+      "nombre": "Salud mental y emocional",
+      "sintomas": ["ansiedad", "depresion", "insomnio", "no puedo dormir", "estres", "ataque de panico", "tristeza", "sin animo", "angustia"],
+      "especialidad": "psiquiatria",
+      "urgencia": "media",
+      "orientacion": "Tu bienestar emocional importa. Si tienes pensamientos de hacerte dano, busca ayuda de inmediato (linea de crisis o urgencias). Para acompanamiento, Psiquiatria o Psicologia."
+    },
+    {
+      "id": "chequeo_general",
+      "nombre": "Chequeo general o malestar leve",
+      "sintomas": ["chequeo", "revision general", "me siento mal", "malestar general", "fiebre", "cansancio", "dolor de cuerpo", "no me siento bien"],
+      "especialidad": "medicina_general",
+      "urgencia": "baja",
+      "orientacion": "Para malestar general o chequeos de rutina, Medicina General es el primer paso y puede referirte a un especialista si hace falta."
+    }
+  ]
+}

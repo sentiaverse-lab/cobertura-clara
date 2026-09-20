@@ -36,22 +36,49 @@ El ranking se ordena por esta nota, no solo por precio. Si el paciente comparte 
 
 ---
 
-## 🚦 Cómo funciona
+## 🤖 Arquitectura agéntica
+
+Vielsin no es un chatbot pasivo: es un **agente** que razona sobre un objetivo, mantiene memoria, **decide qué herramienta usar** y actúa. El LLM nunca inventa cifras; delega el cálculo a herramientas deterministas.
 
 ```
-Paciente describe su síntoma
-        │
-        ▼
-[ /api/agente ] ── Vielsin (IA OpenAI-compatible) interpreta y conversa
-        │            └─ Fallback por reglas si la IA no está disponible
-        ▼
-Especialidad + urgencia (+ banner de emergencia si es grave)
-        │
-        ▼
-[ motor determinístico ] ── copago + Índice CLARO + ranking + comparador de planes
-        │
-        ▼
-Vielsin: copago, hospital recomendado, resumen CLARO, acciones (llamar / cómo llegar / cita)
+                 Paciente (texto o voz, tolera faltas de ortografía)
+                                  │
+                                  ▼
+        ┌──────────────────────────────────────────────┐
+        │   AGENTE VIELSIN  (POST /api/agente)           │
+        │   • Memoria de conversación (plan, síntoma)    │
+        │   • Razona y ELIGE una herramienta:            │
+        └──────────────────────────────────────────────┘
+                                  │
+        ┌──────────────┬──────────────────┬──────────────────┐
+        ▼              ▼                  ▼                  ▼
+   pedir_dato    estimar_copago    comparar_planes      responder
+  (falta info)   │                  │                 (saludo/duda)
+                 ▼                  ▼
+        ┌─────────────────────────────────────┐
+        │  HERRAMIENTA: motor determinista     │
+        │  copago · Índice CLARO · ranking ·   │
+        │  geolocalización · comparador        │
+        └─────────────────────────────────────┘
+                                  │
+                                  ▼
+     Respuesta empática + tarjetas + acciones (llamar / cómo llegar / cita)
+```
+
+**Cerebro del agente — cascada de proveedores (resiliente):**
+
+```
+LLM primario (Groq, rápido)  →  secundario (Cerebras)  →  respaldo (endpoint propio)  →  reglas locales
+```
+
+Si un proveedor falla o tarda, pasa al siguiente automáticamente. Si todos fallan, un **motor de reglas local** (con base de conocimiento de afecciones y tolerancia a errores de tipeo) mantiene el agente funcionando. **Nunca se cae.**
+
+## 🚦 Flujo resumido
+
+```
+Síntoma → el agente deduce especialidad y decide herramienta
+        → ejecuta el cálculo (copago + CLARO + ranking)
+        → responde con empatía + acciones
 ```
 
 Características:
@@ -81,14 +108,21 @@ Abre `http://localhost:4700`.
 
 ### Variables de entorno
 
+El cerebro del agente usa una **cascada de proveedores** (todos compatibles con la API de OpenAI). Se intentan en orden; el primero que responda gana. Todos son opcionales: sin ninguno, el agente funciona en modo reglas.
+
 | Variable | Descripción | Ejemplo |
 |---|---|---|
 | `PORT` | Puerto del servidor | `4700` |
-| `AI_BASE_URL` | Endpoint del proveedor de IA (compatible con OpenAI) | `https://api.openai.com/v1` |
-| `AI_API_KEY` | Clave del proveedor de IA | `sk-...` |
-| `AI_MODEL` | Modelo a usar | `gpt-4o-mini` |
+| `GROQ_API_KEY` | Proveedor primario (rápido) | `gsk_...` |
+| `GROQ_MODEL` | Modelo del primario | `openai/gpt-oss-120b` |
+| `CEREBRAS_API_KEY` | Proveedor secundario | `csk-...` |
+| `CEREBRAS_MODEL` | Modelo del secundario | `gpt-oss-120b` |
+| `AI_BASE_URL` | Endpoint de respaldo (OpenAI-compatible) | `https://.../v1` |
+| `AI_API_KEY` | Clave del respaldo | `sk-...` |
+| `AI_MODEL` | Modelo del respaldo | `gpt-4o-mini` |
+| `AI_TIMEOUT_MS` | Timeout por proveedor antes de pasar al siguiente | `9000` |
 
-El cliente de IA usa el estándar `POST /v1/chat/completions`, por lo que funciona con **cualquier proveedor OpenAI-compatible**.
+Como todo se consume vía el estándar `POST /v1/chat/completions`, funciona con **cualquier proveedor OpenAI-compatible**.
 
 ---
 
