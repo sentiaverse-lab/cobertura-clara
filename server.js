@@ -53,8 +53,9 @@ app.post('/api/agente', security.rateLimit, async (req, res) => {
   const v = security.validarEntradaAgente(req.body);
   if (!v.ok) return res.status(400).json({ error: v.error });
   const { messages, estado, ubicacion } = v;
+  const lang = req.body.lang === 'en' ? 'en' : 'es';
 
-  const ctx = { planId: estado?.planId || null, especialidadId: estado?.especialidadId || null };
+  const ctx = { planId: estado?.planId || null, especialidadId: estado?.especialidadId || null, lang };
   const ultimoUsuario = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
 
   // 1) Intentar con el agente de IA
@@ -63,6 +64,13 @@ app.post('/api/agente', security.rateLimit, async (req, res) => {
   // 2) Fallback conversacional por reglas
   if (!decision) {
     decision = agenteReglas(ultimoUsuario, ctx);
+  }
+
+  // 2b) Salvaguarda de idioma: si la IA respondio en el idioma equivocado,
+  // reemplazamos por el mensaje del fallback (que respeta el idioma).
+  if (decision.fuente === 'ia' && idiomaEquivocado(decision.responder, lang)) {
+    const fb = agenteReglas(ultimoUsuario, ctx);
+    decision.responder = fb.responder;
   }
 
   // Actualizar estado con lo que el agente dedujo
@@ -93,12 +101,13 @@ app.post('/api/agente', security.rateLimit, async (req, res) => {
     // Mensaje que deja clara la especialidad (solo si la IA no habia decidido estimar).
     if (estimacion && !estimacion.error && !decision.estimar) {
       const espNombre = estimator.nombreEspecialidad(nuevoEstado.especialidadId);
-      const urg = nuevoEstado.urgencia === 'alta'
-        ? ' Si los sintomas son intensos o repentinos, acude a urgencias.'
-        : '';
-      decision.responder =
-        `Por lo que me cuentas, podrias considerar una consulta con un especialista en ${espNombre}. ` +
-        `Con tu ${estimacion.plan.nombre}, esto es lo que pagarias:${urg}`;
+      if (lang === 'en') {
+        const urg = nuevoEstado.urgencia === 'alta' ? ' If symptoms are intense or sudden, go to the ER.' : '';
+        decision.responder = `Based on what you tell me, you could consider seeing a ${espNombre} specialist. With your ${estimacion.plan.nombre}, this is what you\'d pay:${urg}`;
+      } else {
+        const urg = nuevoEstado.urgencia === 'alta' ? ' Si los síntomas son intensos o repentinos, acude a urgencias.' : '';
+        decision.responder = `Por lo que me cuentas, podrías considerar una consulta con un especialista en ${espNombre}. Con tu ${estimacion.plan.nombre}, esto es lo que pagarías:${urg}`;
+      }
     }
   }
 
@@ -109,6 +118,18 @@ app.post('/api/agente', security.rateLimit, async (req, res) => {
     fuente: decision.fuente,
   });
 });
+
+// Detecta si el texto NO esta en el idioma esperado (heuristica simple por palabras comunes).
+function idiomaEquivocado(texto, lang) {
+  if (!texto) return false;
+  const t = ' ' + texto.toLowerCase() + ' ';
+  const marcadoresEs = [' que ', ' con ', ' tu ', ' el ', ' la ', ' de ', ' para ', ' es ', ' y ', ' lamento ', ' podrias ', ' seguro '];
+  const marcadoresEn = [' the ', ' your ', ' with ', ' for ', ' you ', ' and ', ' to ', ' is ', ' sorry ', ' could ', ' insurance '];
+  const hitsEs = marcadoresEs.filter((m) => t.includes(m)).length;
+  const hitsEn = marcadoresEn.filter((m) => t.includes(m)).length;
+  if (lang === 'en') return hitsEs > hitsEn; // esperabamos ingles pero parece espanol
+  return hitsEn > hitsEs;                     // esperabamos espanol pero parece ingles
+}
 
 // ── Fallback conversacional determinístico (sin IA) ─────────────────
 function agenteReglas(textoUsuario, ctx) {
@@ -132,37 +153,51 @@ function agenteReglas(textoUsuario, ctx) {
   const yaTeniamosTodo = Boolean(ctx.planId && ctx.especialidadId);
   const hayInfoNueva = Boolean(planNuevo || tieneSintomaTexto);
 
+  const en = ctx.lang === 'en';
+
   // CASO A: falta todo -> saludo/guia
   if (!especialidadId && !planDetectado) {
-    return { responder: 'Hola 👋 Soy Vielsin. Cuentame que sientes y dime tu plan (Esencial, Plus o Premium) para calcular tu copago.', planId: planDetectado, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
+    return { responder: en
+      ? 'Hi 👋 I\'m Vielsin. Tell me what you feel and your plan (Esencial, Plus or Premium) to estimate your copay.'
+      : 'Hola 👋 Soy Vielsin. Cuéntame qué sientes y dime tu plan (Esencial, Plus o Premium) para calcular tu copago.',
+      planId: planDetectado, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
   }
 
   // CASO B: hay plan pero no sabemos el sintoma -> preguntar sintoma
   if (!especialidadId) {
-    return { responder: 'Cuentame, ¿que sintoma o molestia tienes? Asi te oriento a la especialidad correcta.', planId: planDetectado, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
+    return { responder: en
+      ? 'Tell me, what symptom or discomfort do you have? That way I can guide you to the right specialty.'
+      : 'Cuéntame, ¿qué síntoma o molestia tienes? Así te oriento a la especialidad correcta.',
+      planId: planDetectado, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
   }
 
   // CASO C: hay sintoma pero falta plan -> preguntar plan (una sola vez)
   if (!planDetectado) {
     const nombreEsp = estimator.nombreEspecialidad(especialidadId);
     const orient = orientacion ? ` ${orientacion}` : '';
-    return { responder: `Por lo que cuentas, podrias considerar una consulta con ${nombreEsp}.${orient} ¿Cual es tu plan: Esencial, Plus o Premium?`, planId: null, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
+    return { responder: en
+      ? `Based on what you say, you could consider seeing ${nombreEsp}.${orient} What\'s your plan: Esencial, Plus or Premium?`
+      : `Por lo que cuentas, podrías considerar una consulta con ${nombreEsp}.${orient} ¿Cuál es tu plan: Esencial, Plus o Premium?`,
+      planId: null, especialidadId, urgencia, estimar: false, fuente: 'reglas' };
   }
 
   // CASO D: ya teniamos plan + especialidad y el usuario NO aporto info nueva
-  // (ej. "gracias", "por que?", "ok"). No repetimos la estimacion completa.
   if (yaTeniamosTodo && !hayInfoNueva) {
     return {
-      responder: 'Sigo aqui 🙂 Puedes preguntarme por otro plan (ej. "¿y en Premium?"), contarme otro sintoma, o revisar las opciones de hospital de arriba.',
+      responder: en
+        ? 'I\'m here 🙂 You can ask me about another plan (e.g. "what about Premium?"), tell me another symptom, or check the hospital options above.'
+        : 'Sigo aquí 🙂 Puedes preguntarme por otro plan (ej. "¿y en Premium?"), contarme otro síntoma, o revisar las opciones de hospital de arriba.',
       planId: planDetectado, especialidadId, urgencia, estimar: false, fuente: 'reglas',
     };
   }
 
   // CASO E: tenemos plan + especialidad y hay info nueva -> estimar
   const nombreEsp = estimator.nombreEspecialidad(especialidadId);
-  const msgUrg = urgencia === 'alta' ? ' Si los sintomas son intensos o repentinos, acude a urgencias.' : '';
+  const responder = en
+    ? `Based on what you tell me, you could consider seeing ${nombreEsp}. With your plan, this is what you\'d pay:${urgencia === 'alta' ? ' If symptoms are intense or sudden, go to the ER.' : ''}`
+    : `Por lo que me cuentas, podrías considerar una consulta con ${nombreEsp}. Con tu plan, esto es lo que pagarías:${urgencia === 'alta' ? ' Si los síntomas son intensos o repentinos, acude a urgencias.' : ''}`;
   return {
-    responder: `Por lo que me cuentas, podrias considerar una consulta con ${nombreEsp}. Con tu plan, esto es lo que pagarias:${msgUrg}`,
+    responder,
     planId: planDetectado,
     especialidadId,
     urgencia,
