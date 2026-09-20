@@ -244,7 +244,7 @@ function addBot(html) {
   div.className = 'flex gap-2.5 items-start fade-up';
   div.innerHTML = `
     <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-8 h-8 rounded-full shrink-0" />
-    <div class="glass rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-slate-100 max-w-[86%] space-y-2">${html}</div>`;
+    <div class="glass rounded-2xl rounded-tl-sm px-3 sm:px-4 py-2.5 text-sm text-slate-100 flex-1 min-w-0 sm:max-w-[88%] space-y-2">${html}</div>`;
   stream.appendChild(div);
   // Llevar la vista al INICIO de la respuesta del bot (no al fondo),
   // para leer desde donde Vielsin empieza a hablar.
@@ -568,7 +568,7 @@ function accionesHospital(h) {
     btns.push(`<a href="${wa}" target="_blank" rel="noopener" class="${cls}">${t('requestAppt')}</a>`);
   }
   if (!btns.length) return '';
-  return `<div class="flex flex-wrap gap-1.5 mt-2 pl-0 sm:pl-14">${btns.join('')}</div>`;
+  return `<div class="flex flex-wrap gap-1.5 mt-2">${btns.join('')}</div>`;
 }
 
 function tablaHospitales(est) {
