@@ -1,0 +1,20 @@
+# Despliegue en Render (https://render.com) — plan gratuito.
+# 1) Sube este repo a GitHub.
+# 2) En Render: New + > Blueprint > selecciona el repo.
+# 3) Configura las variables AI_BASE_URL, AI_API_KEY, AI_MODEL en el dashboard.
+services:
+  - type: web
+    name: cobertura-clara
+    runtime: node
+    plan: free
+    buildCommand: npm install --no-fund --no-audit
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AI_MODEL
+        sync: false
+      - key: AI_BASE_URL
+        sync: false
+      - key: AI_API_KEY
+        sync: false

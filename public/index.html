@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vielsin · Tu copago, claro antes de atenderte</title>
+  <meta name="description" content="Asistente conversacional que estima tu copago y te recomienda el hospital de tu red mas economico segun tu plan de seguro." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { color-scheme: dark; }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.10); }
+    .grad-text { background: linear-gradient(90deg,#5eead4,#38bdf8,#818cf8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glow { box-shadow: 0 0 40px -8px rgba(56,189,248,0.5); }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp .4s cubic-bezier(.2,.7,.3,1) both; }
+    @keyframes pop { 0%{transform:scale(.85);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+    .pop { animation: pop .45s cubic-bezier(.2,.8,.3,1) both; }
+    @keyframes pulseDot { 0%,100%{opacity:.35} 50%{opacity:1} }
+    .typing span { animation: pulseDot 1.2s infinite; display:inline-block; }
+    .typing span:nth-child(2){ animation-delay:.2s } .typing span:nth-child(3){ animation-delay:.4s }
+    .bar-fill { transition: width 1s cubic-bezier(.2,.8,.2,1); }
+    .aurora { background:
+        radial-gradient(60% 60% at 20% 10%, rgba(56,189,248,.16), transparent 60%),
+        radial-gradient(50% 50% at 90% 20%, rgba(129,140,248,.16), transparent 60%),
+        radial-gradient(60% 60% at 50% 100%, rgba(45,212,191,.14), transparent 60%); }
+    #stream::-webkit-scrollbar{width:8px} #stream::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:8px}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 aurora flex flex-col h-full">
+  <div class="w-full max-w-3xl mx-auto flex flex-col h-full px-4">
+
+    <!-- Header compacto -->
+    <header class="pt-5 pb-3 shrink-0">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-400 to-sky-500 flex items-center justify-center text-slate-900 font-extrabold glow">V</div>
+          <div>
+            <h1 class="text-lg font-extrabold leading-tight grad-text">Vielsin</h1>
+            <p class="text-[11px] text-slate-400 leading-tight">Tu copago y mejor hospital, antes de atenderte</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="geoBtn" title="Ordenar hospitales por cercania a ti"
+            class="flex items-center gap-1.5 bg-slate-900/70 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition">
+            <span id="geoIcon">📍</span><span id="geoLabel" class="hidden sm:inline">Usar mi ubicacion</span>
+          </button>
+          <select id="planSelect" title="Atajo: fija tu plan"
+            class="bg-slate-900/70 border border-white/10 rounded-xl px-2.5 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-teal-400/60">
+            <option value="">Plan: preguntar en el chat</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conversacion (scrollable) -->
+    <main id="stream" class="flex-1 overflow-y-auto space-y-3 py-3 pr-1"></main>
+
+    <!-- Barra de escritura (siempre activa) -->
+    <footer class="shrink-0 pb-4 pt-2">
+      <div class="glass rounded-2xl p-2 flex items-end gap-2">
+        <textarea id="input" rows="1" placeholder="Escribe aqui... ej: me duele el pecho al respirar, tengo Plan Plus"
+          class="flex-1 bg-transparent resize-none max-h-32 px-3 py-2.5 text-sm focus:outline-none placeholder:text-slate-500"></textarea>
+        <button id="sendBtn"
+          class="shrink-0 w-11 h-11 rounded-xl bg-gradient-to-r from-teal-400 to-sky-500 hover:from-teal-300 hover:to-sky-400 text-slate-900 font-bold transition disabled:opacity-40 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+      <p class="text-center text-[10px] text-slate-600 mt-2">Orientacion informativa · datos de ejemplo · no sustituye tu poliza ni el criterio medico</p>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

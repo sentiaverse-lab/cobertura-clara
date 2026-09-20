@@ -1,0 +1,100 @@
+{
+  "descripcion": "Red de hospitales de demostracion con tarifas de consulta por especialidad (USD). Datos ficticios (nombres, telefonos, webs y coordenadas son de ejemplo, no reales). 'enRed' = pertenece a la red del asegurador.",
+  "hospitales": [
+    {
+      "id": "HOSP-CENTRO",
+      "nombre": "Centro Medico Metropolitano",
+      "zona": "Ciudad de Panama",
+      "direccion": "Av. Balboa, Corregimiento de Bella Vista, Ciudad de Panama",
+      "telefono": "+507 300-0001",
+      "web": "https://ejemplo-metropolitano.test",
+      "lat": 8.9824,
+      "lng": -79.5199,
+      "enRed": true,
+      "calidad": 4.6,
+      "esperaDias": 3,
+      "distanciaKm": 5,
+      "tarifas": {
+        "medicina_general": 45, "cardiologia": 140, "neumologia": 120, "gastroenterologia": 130,
+        "traumatologia": 125, "dermatologia": 90, "neurologia": 160, "otorrinolaringologia": 95,
+        "oftalmologia": 100, "ginecologia": 110, "urologia": 120, "endocrinologia": 115, "psiquiatria": 130
+      }
+    },
+    {
+      "id": "HOSP-NACIONAL",
+      "nombre": "Hospital Nacional del Este",
+      "zona": "San Miguelito",
+      "direccion": "Via Ricardo J. Alfaro, San Miguelito, Panama",
+      "telefono": "+507 300-0002",
+      "web": "https://ejemplo-nacionaleste.test",
+      "lat": 9.0333,
+      "lng": -79.5000,
+      "enRed": true,
+      "calidad": 4.2,
+      "esperaDias": 5,
+      "distanciaKm": 12,
+      "tarifas": {
+        "medicina_general": 35, "cardiologia": 110, "neumologia": 95, "gastroenterologia": 105,
+        "traumatologia": 100, "dermatologia": 70, "neurologia": 135, "otorrinolaringologia": 80,
+        "oftalmologia": 85, "ginecologia": 90, "urologia": 100, "endocrinologia": 95, "psiquiatria": 110
+      }
+    },
+    {
+      "id": "HOSP-BIENESTAR",
+      "nombre": "Clinica Bienestar Integral",
+      "zona": "La Chorrera",
+      "direccion": "Calle Principal, La Chorrera, Panama Oeste",
+      "telefono": "+507 300-0003",
+      "web": "https://ejemplo-bienestar.test",
+      "lat": 8.8803,
+      "lng": -79.7833,
+      "enRed": true,
+      "calidad": 4.0,
+      "esperaDias": 2,
+      "distanciaKm": 28,
+      "tarifas": {
+        "medicina_general": 28, "cardiologia": 95, "neumologia": 82, "gastroenterologia": 90,
+        "traumatologia": 88, "dermatologia": 60, "neurologia": 120, "otorrinolaringologia": 68,
+        "oftalmologia": 72, "ginecologia": 78, "urologia": 85, "endocrinologia": 80, "psiquiatria": 92
+      }
+    },
+    {
+      "id": "HOSP-PREMIER",
+      "nombre": "Hospital Premier Santa Fe",
+      "zona": "Ciudad de Panama",
+      "direccion": "Calle 50, Santa Fe, Ciudad de Panama",
+      "telefono": "+507 300-0004",
+      "web": "https://ejemplo-premier.test",
+      "lat": 8.9900,
+      "lng": -79.5170,
+      "enRed": true,
+      "calidad": 4.8,
+      "esperaDias": 7,
+      "distanciaKm": 8,
+      "tarifas": {
+        "medicina_general": 60, "cardiologia": 180, "neumologia": 155, "gastroenterologia": 165,
+        "traumatologia": 160, "dermatologia": 120, "neurologia": 200, "otorrinolaringologia": 125,
+        "oftalmologia": 130, "ginecologia": 140, "urologia": 150, "endocrinologia": 145, "psiquiatria": 170
+      }
+    },
+    {
+      "id": "HOSP-FUERADERED",
+      "nombre": "Clinica Vista Mar (fuera de red)",
+      "zona": "Costa del Este",
+      "direccion": "Boulevard Costa del Este, Ciudad de Panama",
+      "telefono": "+507 300-0005",
+      "web": "https://ejemplo-vistamar.test",
+      "lat": 9.0100,
+      "lng": -79.4700,
+      "enRed": false,
+      "calidad": 4.5,
+      "esperaDias": 1,
+      "distanciaKm": 6,
+      "tarifas": {
+        "medicina_general": 70, "cardiologia": 210, "neumologia": 180, "gastroenterologia": 190,
+        "traumatologia": 185, "dermatologia": 140, "neurologia": 230, "otorrinolaringologia": 150,
+        "oftalmologia": 155, "ginecologia": 165, "urologia": 175, "endocrinologia": 170, "psiquiatria": 200
+      }
+    }
+  ]
+}

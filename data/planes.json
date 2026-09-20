@@ -1,0 +1,38 @@
+{
+  "descripcion": "Catalogo de planes de seguro de demostracion. Los montos estan en USD (Panama). Datos ficticios. Modelo inspirado en estimadores reales: deducible anual + coaseguro + tope por consulta + tope de gasto anual de bolsillo.",
+  "planes": [
+    {
+      "id": "PLAN-ESENCIAL",
+      "nombre": "Plan Esencial",
+      "coaseguroPct": 30,
+      "deducibleAnual": 300,
+      "topeCopagoConsulta": 60,
+      "topeGastoAnual": 3000,
+      "carenciaDias": 30,
+      "cubreEspecialidades": ["medicina_general", "cardiologia", "neumologia", "gastroenterologia", "traumatologia", "dermatologia", "otorrinolaringologia", "oftalmologia"],
+      "excluye": ["psiquiatria", "endocrinologia"]
+    },
+    {
+      "id": "PLAN-PLUS",
+      "nombre": "Plan Plus",
+      "coaseguroPct": 20,
+      "deducibleAnual": 150,
+      "topeCopagoConsulta": 40,
+      "topeGastoAnual": 2000,
+      "carenciaDias": 15,
+      "cubreEspecialidades": ["medicina_general", "cardiologia", "neumologia", "gastroenterologia", "traumatologia", "dermatologia", "otorrinolaringologia", "oftalmologia", "neurologia", "ginecologia", "urologia", "endocrinologia"],
+      "excluye": ["psiquiatria"]
+    },
+    {
+      "id": "PLAN-PREMIUM",
+      "nombre": "Plan Premium",
+      "coaseguroPct": 10,
+      "deducibleAnual": 0,
+      "topeCopagoConsulta": 25,
+      "topeGastoAnual": 1000,
+      "carenciaDias": 0,
+      "cubreEspecialidades": ["medicina_general", "cardiologia", "neumologia", "gastroenterologia", "traumatologia", "dermatologia", "otorrinolaringologia", "oftalmologia", "neurologia", "ginecologia", "urologia", "endocrinologia", "psiquiatria"],
+      "excluye": []
+    }
+  ]
+}

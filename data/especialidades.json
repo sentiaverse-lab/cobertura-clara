@@ -1,0 +1,33 @@
+{
+  "descripcion": "Mapa de sintomas comunes a especialidad medica sugerida, con nivel de urgencia orientativo. Datos de demostracion, no constituyen consejo medico.",
+  "especialidades": [
+    { "id": "cardiologia", "nombre": "Cardiologia" },
+    { "id": "neumologia", "nombre": "Neumologia" },
+    { "id": "gastroenterologia", "nombre": "Gastroenterologia" },
+    { "id": "traumatologia", "nombre": "Traumatologia y Ortopedia" },
+    { "id": "dermatologia", "nombre": "Dermatologia" },
+    { "id": "neurologia", "nombre": "Neurologia" },
+    { "id": "otorrinolaringologia", "nombre": "Otorrinolaringologia" },
+    { "id": "oftalmologia", "nombre": "Oftalmologia" },
+    { "id": "ginecologia", "nombre": "Ginecologia" },
+    { "id": "urologia", "nombre": "Urologia" },
+    { "id": "medicina_general", "nombre": "Medicina General" },
+    { "id": "endocrinologia", "nombre": "Endocrinologia" },
+    { "id": "psiquiatria", "nombre": "Psiquiatria" }
+  ],
+  "reglas": [
+    { "palabras": ["pecho", "corazon", "palpitacion", "palpitaciones", "presion en el pecho", "opresion"], "especialidad": "cardiologia", "urgencia": "alta" },
+    { "palabras": ["respirar", "respiracion", "falta de aire", "ahogo", "tos", "flema", "pulmon", "silbido"], "especialidad": "neumologia", "urgencia": "media" },
+    { "palabras": ["estomago", "abdomen", "nausea", "vomito", "diarrea", "acidez", "digestion", "gastritis"], "especialidad": "gastroenterologia", "urgencia": "media" },
+    { "palabras": ["hueso", "fractura", "rodilla", "tobillo", "espalda", "articulacion", "esguince", "golpe", "caida"], "especialidad": "traumatologia", "urgencia": "media" },
+    { "palabras": ["piel", "sarpullido", "roncha", "mancha", "comezon", "picazon", "acne", "lunar"], "especialidad": "dermatologia", "urgencia": "baja" },
+    { "palabras": ["cabeza", "migrana", "mareo", "hormigueo", "convulsion", "desmayo", "vision borrosa"], "especialidad": "neurologia", "urgencia": "alta" },
+    { "palabras": ["oido", "garganta", "nariz", "sinusitis", "ronquera", "amigdalas"], "especialidad": "otorrinolaringologia", "urgencia": "baja" },
+    { "palabras": ["ojo", "ojos", "vista", "vision", "conjuntivitis"], "especialidad": "oftalmologia", "urgencia": "baja" },
+    { "palabras": ["menstruacion", "regla", "embarazo", "ovario", "flujo", "ginecologico"], "especialidad": "ginecologia", "urgencia": "media" },
+    { "palabras": ["orina", "orinar", "rinon", "prostata", "vejiga", "urinario"], "especialidad": "urologia", "urgencia": "media" },
+    { "palabras": ["azucar", "diabetes", "tiroides", "hormona", "peso"], "especialidad": "endocrinologia", "urgencia": "baja" },
+    { "palabras": ["ansiedad", "depresion", "insomnio", "estres", "animo", "panico"], "especialidad": "psiquiatria", "urgencia": "media" }
+  ],
+  "porDefecto": { "especialidad": "medicina_general", "urgencia": "baja" }
+}

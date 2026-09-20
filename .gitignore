@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+dist/
+
+# Archivos temporales de prueba
+_e2e*.txt
+_e2e*.js
+_ping_*.*
+_c.txt

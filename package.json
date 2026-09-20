@@ -1,0 +1,27 @@
+{
+  "name": "cobertura-clara",
+  "version": "1.0.0",
+  "description": "Agente conversacional que estima el copago del paciente y recomienda el hospital de su red mas economico segun su plan de seguro.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "keywords": [
+    "healthcare",
+    "insurance",
+    "copay",
+    "ai-agent",
+    "triage"
+  ],
+  "license": "MIT"
+}
