@@ -303,6 +303,10 @@ async function enviar() {
   const texto = input.value.trim();
   if (!texto) return;
 
+  // Ocultar los chips de ejemplo al primer mensaje (libera espacio del chat)
+  const chips = document.querySelector('#chipsWrap');
+  if (chips) chips.remove();
+
   addUser(texto);
   historial.push({ role: 'user', content: texto });
   input.value = '';
