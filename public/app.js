@@ -244,13 +244,14 @@ function addUser(texto) {
 
 function addBot(html) {
   const div = document.createElement('div');
-  div.className = 'flex gap-2.5 items-start fade-up';
+  div.className = 'fade-up';
   div.innerHTML = `
-    <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-8 h-8 rounded-full shrink-0" />
-    <div class="glass rounded-2xl rounded-tl-sm px-3 sm:px-4 py-2.5 text-sm text-slate-100 flex-1 min-w-0 sm:max-w-[88%] space-y-2">${html}</div>`;
+    <div class="flex items-center gap-2 mb-1">
+      <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-6 h-6 rounded-full shrink-0" />
+      <span class="text-[11px] font-semibold text-teal-300/80">Vielsin</span>
+    </div>
+    <div class="glass rounded-2xl rounded-tl-sm px-3.5 py-3 text-sm text-slate-100 space-y-3">${html}</div>`;
   stream.appendChild(div);
-  // Llevar la vista al INICIO de la respuesta del bot (no al fondo),
-  // para leer desde donde Vielsin empieza a hablar.
   scrollAInicio(div);
   return div;
 }
@@ -258,7 +259,7 @@ function addBot(html) {
 function addChips() {
   const wrap = document.createElement('div');
   wrap.id = 'chipsWrap';
-  wrap.className = 'flex flex-wrap gap-2 pl-10 fade-up';
+  wrap.className = 'flex flex-wrap gap-2 fade-up';
   (t('examples') || []).forEach((ej, i) => {
     const b = document.createElement('button');
     // En movil mostramos solo los 2 primeros; los otros aparecen en pantallas grandes.
@@ -274,10 +275,13 @@ function addChips() {
 
 function addTyping() {
   const div = document.createElement('div');
-  div.className = 'flex gap-2.5 items-start';
+  div.className = 'fade-up';
   div.innerHTML = `
-    <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-8 h-8 rounded-full shrink-0" />
-    <div class="glass rounded-2xl rounded-tl-sm px-4 py-3 text-slate-400 typing"><span>●</span><span>●</span><span>●</span></div>`;
+    <div class="flex items-center gap-2 mb-1">
+      <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-6 h-6 rounded-full shrink-0" />
+      <span class="text-[11px] font-semibold text-teal-300/80">Vielsin</span>
+    </div>
+    <div class="glass rounded-2xl rounded-tl-sm px-4 py-3 text-slate-400 typing inline-block"><span>●</span><span>●</span><span>●</span></div>`;
   stream.appendChild(div);
   scroll();
   return div;
