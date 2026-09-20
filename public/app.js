@@ -66,23 +66,30 @@ async function init() {
   addBot(t('greeting')); // saludo inicial
   addChips();
   initGiroscopio();     // parallax del ECG con el sensor del telefono
+  initSacudida();       // sacudir para reiniciar la consulta (con confirmacion)
 }
 
-// ── Giroscopio: mueve el fondo ECG segun la inclinacion del telefono ──
+// ¿El usuario pidio reducir movimiento? (accesibilidad) -> desactivamos efectos.
+function movimientoReducido() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// ── Giroscopio: parallax de profundidad sutil segun la inclinacion ──
 function initGiroscopio() {
   const tilt = document.querySelector('#ecgTilt');
-  if (!tilt || !window.DeviceOrientationEvent) return; // desktop: se queda la animacion normal
+  if (!tilt || !window.DeviceOrientationEvent || movimientoReducido()) return;
 
   const onTilt = (e) => {
-    // gamma: izq/der (-90..90), beta: adelante/atras (-180..180)
-    const gx = Math.max(-45, Math.min(45, e.gamma || 0));
-    const gy = Math.max(-45, Math.min(45, (e.beta || 0) - 45));
-    // Movimiento sutil: hasta ~30px en cada eje
-    tilt.style.setProperty('--tx', (gx / 45 * 30).toFixed(1) + 'px');
-    tilt.style.setProperty('--ty', (gy / 45 * 20).toFixed(1) + 'px');
+    const gx = Math.max(-45, Math.min(45, e.gamma || 0));      // izq/der
+    const gy = Math.max(-45, Math.min(45, (e.beta || 0) - 45)); // adelante/atras
+    // Fondo ECG: se mueve mas (capa lejana) -> sensacion de profundidad
+    tilt.style.setProperty('--tx', (gx / 45 * 34).toFixed(1) + 'px');
+    tilt.style.setProperty('--ty', (gy / 45 * 24).toFixed(1) + 'px');
+    // Capa cercana (contenido): se mueve muy poco, en sentido contrario
+    document.documentElement.style.setProperty('--px', (gx / 45 * -6).toFixed(1) + 'px');
+    document.documentElement.style.setProperty('--py', (gy / 45 * -4).toFixed(1) + 'px');
   };
 
-  // iOS 13+ exige permiso explicito tras un gesto del usuario.
   const necesitaPermiso = typeof DeviceOrientationEvent.requestPermission === 'function';
   if (necesitaPermiso) {
     const pedir = () => {
@@ -91,11 +98,70 @@ function initGiroscopio() {
       }).catch(() => {});
       document.body.removeEventListener('click', pedir);
     };
-    // Se activa con el primer toque en la pantalla (requisito de iOS)
     document.body.addEventListener('click', pedir, { once: true });
   } else {
     window.addEventListener('deviceorientation', onTilt);
   }
+}
+
+// ── Sacudir para reiniciar la consulta (seguro: firme + con confirmacion) ──
+function initSacudida() {
+  if (!window.DeviceMotionEvent || movimientoReducido()) return;
+  let ultimo = { x: 0, y: 0, z: 0, t: 0 };
+  let ultimaSacudida = 0;
+  const UMBRAL = 22; // aceleracion fuerte (evita movimientos casuales)
+
+  const onMotion = (e) => {
+    const a = e.accelerationIncludingGravity;
+    if (!a) return;
+    const ahora = Date.now();
+    if (ahora - ultimo.t < 100) return;
+    const dt = ahora - ultimo.t;
+    const delta = (Math.abs(a.x - ultimo.x) + Math.abs(a.y - ultimo.y) + Math.abs(a.z - ultimo.z)) / dt * 100;
+    ultimo = { x: a.x, y: a.y, z: a.z, t: ahora };
+    if (delta > UMBRAL && ahora - ultimaSacudida > 2500) {
+      ultimaSacudida = ahora;
+      confirmarReinicioPorSacudida();
+    }
+  };
+
+  const activar = () => window.addEventListener('devicemotion', onMotion);
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    document.body.addEventListener('click', () => {
+      DeviceMotionEvent.requestPermission().then((s) => { if (s === 'granted') activar(); }).catch(() => {});
+    }, { once: true });
+  } else {
+    activar();
+  }
+}
+
+// Pide confirmacion antes de borrar (no reinicia por accidente).
+let pidiendoReinicio = false;
+function confirmarReinicioPorSacudida() {
+  if (pidiendoReinicio) return;
+  pidiendoReinicio = true;
+  const b = addBot(
+    (getLang() === 'en'
+      ? 'Did you shake your phone? Do you want to start a new query?'
+      : '¿Sacudiste tu teléfono? ¿Quieres empezar una nueva consulta?') +
+    `<div class="flex gap-2 mt-2">
+      <button data-shake-yes class="text-sm px-3 py-1.5 rounded-lg bg-teal-400 text-slate-900 font-semibold">${getLang() === 'en' ? 'Yes, restart' : 'Sí, reiniciar'}</button>
+      <button data-shake-no class="text-sm px-3 py-1.5 rounded-lg bg-slate-800 border border-white/10 text-slate-200">${getLang() === 'en' ? 'No' : 'No'}</button>
+    </div>`
+  );
+  const yes = b.querySelector('[data-shake-yes]');
+  const no = b.querySelector('[data-shake-no]');
+  if (yes) yes.addEventListener('click', () => { pidiendoReinicio = false; reiniciarConsulta(); });
+  if (no) no.addEventListener('click', () => { pidiendoReinicio = false; b.remove(); });
+}
+
+function reiniciarConsulta() {
+  historial.length = 0;
+  estado = { planId: planSelect.value || '', especialidadId: '', urgencia: null };
+  bannerEmergenciaMostrado = false;
+  stream.innerHTML = '';
+  addBot(t('greeting'));
+  addChips();
 }
 
 // ── Idioma (ES/EN) ──────────────────────────────────────────────────

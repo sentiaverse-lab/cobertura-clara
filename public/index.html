@@ -40,6 +40,8 @@
     .ecg-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     /* Contenedor que reacciona al giroscopio via variables --tx / --ty */
     .ecg-tilt { position: absolute; inset: -60px; transform: translate(var(--tx, 0px), var(--ty, 0px)); transition: transform .25s ease-out; }
+    /* Capa cercana (contenido): parallax muy sutil para dar profundidad */
+    .parallax-front { transform: translate(var(--px, 0px), var(--py, 0px)); transition: transform .25s ease-out; }
     .ecg-line { position: absolute; top: 50%; left: 0; width: 200%; height: 140px; transform: translateY(-50%); opacity: .22; animation: ecgmove 7s linear infinite; }
     @keyframes ecgmove { from { transform: translateY(-50%) translateX(0); } to { transform: translateY(-50%) translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) { .ecg-line { animation: none; } }
@@ -63,7 +65,7 @@
    </div>
   </div>
 
-  <div class="relative z-10 w-full max-w-3xl mx-auto flex flex-col h-full px-3">
+  <div class="parallax-front relative z-10 w-full max-w-3xl mx-auto flex flex-col h-full px-3">
 
     <!-- Header responsive con controles grandes (accesible para adultos mayores) -->
     <header class="pt-2 pb-1.5 shrink-0">
@@ -119,9 +121,9 @@
     </footer>
   </div>
 
-  <script src="/i18n.js?v=16"></script>
-  <script src="/device-ai.js?v=16"></script>
-  <script src="/app.js?v=16"></script>
+  <script src="/i18n.js?v=17"></script>
+  <script src="/device-ai.js?v=17"></script>
+  <script src="/app.js?v=17"></script>
   <script>
     // Registrar el Service Worker (PWA). Falla en silencio si no hay soporte.
     if ('serviceWorker' in navigator) {
