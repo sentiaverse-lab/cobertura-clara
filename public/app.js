@@ -319,15 +319,26 @@ async function enviar() {
     // Banner de emergencia (prioridad maxima, antes de cualquier calculo)
     if (estado.urgencia === 'alta') mostrarBannerEmergencia();
 
+    // Si la respuesta vino del fallback por reglas, intentamos darle calidez
+    // usando la IA del propio dispositivo (on-device), si esta disponible.
+    let responder = r.responder;
+    if (r.fuente === 'reglas' && estado.especialidadId) {
+      try {
+        const espNombre = (r.estimacion && r.estimacion.especialidadNombre) || estado.especialidadId;
+        const frase = await DeviceAI.fraseEmpatica(texto, espNombre, getLang());
+        if (frase) responder = frase + (r.estimacion ? ' ' + (getLang() === 'en' ? "Here's your estimate:" : 'Aquí está tu estimado:') : '');
+      } catch (_) { /* si falla, usamos el mensaje original */ }
+    }
+
     // Mensaje del bot (+ badge de urgencia si aplica)
-    let html = escapeHtml(r.responder);
+    let html = escapeHtml(responder);
     if (estado.urgencia) {
       const u = urgencia(estado.urgencia);
       html += `<div><span class="inline-flex items-center gap-1.5 mt-1 px-2.5 py-1 rounded-full border text-xs ${u.cls}"><span class="w-1.5 h-1.5 rounded-full ${u.dot}"></span>${u.txt}</span></div>`;
     }
     const bubble = addBot(html);
-    historial.push({ role: 'assistant', content: r.responder });
-    hablar(r.responder);
+    historial.push({ role: 'assistant', content: responder });
+    hablar(responder);
 
     // Si hubo estimacion, insertar las tarjetas dentro del chat
     if (r.estimacion) {
