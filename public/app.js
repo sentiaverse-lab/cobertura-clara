@@ -248,7 +248,7 @@ function addBot(html) {
   div.innerHTML = `
     <div class="flex items-center gap-2 mb-1">
       <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-6 h-6 rounded-full shrink-0" />
-      <span class="text-[11px] font-semibold text-teal-300/80">Vielsin</span>
+      <span class="text-xs font-semibold text-teal-300/80">Vielsin</span>
     </div>
     <div class="glass rounded-2xl rounded-tl-sm px-3.5 py-3 text-sm text-slate-100 space-y-3">${html}</div>`;
   stream.appendChild(div);
@@ -264,7 +264,7 @@ function addChips() {
     const b = document.createElement('button');
     // En movil mostramos solo los 2 primeros; los otros aparecen en pantallas grandes.
     const ocultoMovil = i >= 2 ? ' hidden sm:inline-block' : '';
-    b.className = 'text-[11px] px-2.5 py-1 rounded-full bg-slate-900/70 border border-white/10 text-slate-400 hover:text-teal-300 hover:border-teal-400/40 transition' + ocultoMovil;
+    b.className = 'text-xs px-2.5 py-1 rounded-full bg-slate-900/70 border border-white/10 text-slate-400 hover:text-teal-300 hover:border-teal-400/40 transition' + ocultoMovil;
     b.textContent = ej;
     b.onclick = () => { input.value = ej; input.focus(); autosize(); };
     wrap.appendChild(b);
@@ -279,7 +279,7 @@ function addTyping() {
   div.innerHTML = `
     <div class="flex items-center gap-2 mb-1">
       <img src="/vielsin-avatar.svg" alt="Vielsin" class="w-6 h-6 rounded-full shrink-0" />
-      <span class="text-[11px] font-semibold text-teal-300/80">Vielsin</span>
+      <span class="text-xs font-semibold text-teal-300/80">Vielsin</span>
     </div>
     <div class="glass rounded-2xl rounded-tl-sm px-4 py-3 text-slate-400 typing inline-block"><span>●</span><span>●</span><span>●</span></div>`;
   stream.appendChild(div);
@@ -398,33 +398,33 @@ function renderEstimacion(bubble, est) {
   if (rec.deducibleAplicado > 0) desglose.push(`${getLang() === 'en' ? 'deductible' : 'deducible'} ${money(rec.deducibleAplicado)}`);
   if (rec.coaseguro > 0) desglose.push(`${getLang() === 'en' ? 'coinsurance' : 'coaseguro'} ${est.plan.coaseguroPct}% = ${money(rec.coaseguro)}`);
   if (rec.topeAplicado) desglose.push(getLang() === 'en' ? 'copay cap applied' : 'tope de copago aplicado');
-  const desgloseTxt = desglose.length ? `<p class="text-[11px] text-slate-500 mt-2">${t('howCalculated')}: ${desglose.join(' + ')}.</p>` : '';
+  const desgloseTxt = desglose.length ? `<p class="text-xs text-slate-300 mt-2">${t('howCalculated')}: ${desglose.join(' + ')}.</p>` : '';
 
   cont.innerHTML = `
     <div class="rounded-2xl p-3 pop bg-teal-400/10 border border-teal-400/25 flex items-center gap-3">
       <span class="text-xl">🩺</span>
       <div>
-        <p class="text-[11px] text-slate-400 leading-tight">${t('specialty')}</p>
+        <p class="text-xs text-slate-400 leading-tight">${t('specialty')}</p>
         <p class="text-base font-bold text-teal-200 leading-tight">${escapeHtml(est.especialidadNombre)}</p>
       </div>
     </div>
     <div class="rounded-2xl p-4 pop glow bg-slate-900/50 border border-white/10">
       <div class="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <p class="text-[11px] uppercase tracking-wider text-slate-400">${t('copayBest')}</p>
+          <p class="text-xs uppercase tracking-wider text-slate-400">${t('copayBest')}</p>
           <div class="text-4xl font-extrabold grad-text">${money(rec.copago)}</div>
           <p class="text-xs text-slate-400 mt-0.5">${t('of')} ${money(rec.tarifa)} ${t('at')} <strong class="text-slate-200">${escapeHtml(rec.nombre)}</strong> · ★ ${rec.calidad.toFixed(1)}</p>
         </div>
         ${nota != null ? `<div class="text-center shrink-0">
-          <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Índice CLARO</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider mb-0.5">Índice CLARO</div>
           <div class="w-16 h-16 rounded-2xl bg-slate-800/80 border border-teal-400/30 flex flex-col items-center justify-center">
             <span class="text-2xl font-extrabold grad-text leading-none">${nota.toFixed(1)}</span>
-            <span class="text-[9px] text-slate-500 leading-none mt-0.5">/10</span>
+            <span class="text-xs text-slate-300 leading-none mt-0.5">/10</span>
           </div>
         </div>` : ''}
       </div>
       <div class="mt-4">
-        <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+        <div class="flex justify-between text-xs text-slate-400 mb-1">
           <span>${t('coversYourInsurance')} · ${money(rec.cubreSeguro)}</span>
           <span>${t('youPay')} · ${money(rec.copago)}</span>
         </div>
@@ -432,17 +432,17 @@ function renderEstimacion(bubble, est) {
           <div class="bar-fill h-full bg-gradient-to-r from-teal-400 to-sky-500" style="width:0%" data-w="${pct}%"></div>
           <div class="bar-fill h-full bg-slate-600" style="width:0%" data-w="${100 - pct}%"></div>
         </div>
-        <p class="text-[11px] text-slate-500 mt-1">${t('planCovers', pct)}</p>
+        <p class="text-xs text-slate-300 mt-1">${t('planCovers', pct)}</p>
         ${desgloseTxt}
       </div>
       <div class="mt-3 pt-3 border-t border-white/10 flex flex-wrap gap-1.5">
-        <button data-resumen class="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/70 border border-white/10 text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition">${t('copySummary')}</button>
+        <button data-resumen class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-slate-800/70 border border-white/10 text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition">${t('copySummary')}</button>
       </div>
     </div>
     ${resumenClaro(est)}
     ${comparadorPlanes(est)}
     ${tablaHospitales(est)}
-    <p class="text-[10px] text-slate-600 px-1">${t('disclaimerFull')}</p>`;
+    <p class="text-xs text-slate-400 px-1">${t('disclaimerFull')}</p>`;
 
   bubble.appendChild(cont);
   animarBarras();
@@ -457,7 +457,7 @@ function renderEstimacion(bubble, est) {
         await navigator.clipboard.writeText(texto);
         btnResumen.textContent = t('summaryCopied');
       } catch (_) {
-        addBot('<pre class="whitespace-pre-wrap text-[11px] text-slate-300">' + escapeHtml(texto) + '</pre>');
+        addBot('<pre class="whitespace-pre-wrap text-xs text-slate-300">' + escapeHtml(texto) + '</pre>');
       }
       setTimeout(() => { btnResumen.textContent = t('copySummary'); }, 2500);
     });
@@ -538,7 +538,7 @@ function comparadorPlanes(est) {
   return `
     <div class="rounded-2xl p-4 bg-slate-900/50 border border-white/10">
       <p class="text-sm font-semibold text-slate-200 mb-1">${t('comparePlans')}</p>
-      <p class="text-[11px] text-slate-500 mb-3">${t('comparePlansHint', escapeHtml(est.recomendado.nombre))}</p>
+      <p class="text-xs text-slate-300 mb-3">${t('comparePlansHint', escapeHtml(est.recomendado.nombre))}</p>
       <div class="space-y-1.5">${rows}</div>
     </div>`;
 }
@@ -551,16 +551,16 @@ function resumenClaro(est) {
     <div class="flex items-start gap-2.5 px-3 py-2.5 rounded-xl bg-slate-900/40 border border-white/5">
       <span class="text-base leading-none mt-0.5">${icon}</span>
       <div class="min-w-0">
-        <div class="text-[11px] text-slate-400">${etiqueta}</div>
+        <div class="text-xs text-slate-400">${etiqueta}</div>
         <div class="text-sm font-semibold text-slate-100 truncate">${escapeHtml(nombre)}</div>
-        <div class="text-[11px] text-slate-500">${detalle}</div>
+        <div class="text-xs text-slate-300">${detalle}</div>
       </div>
     </div>`;
   const d = getLang() === 'en' ? 'd wait' : 'd';
   return `
     <div class="rounded-2xl p-4 bg-slate-900/50 border border-white/10">
       <p class="text-sm font-semibold text-slate-200 mb-1">${t('claroSummary')}</p>
-      <p class="text-[11px] text-slate-500 mb-3">${t('claroSummaryHint')}</p>
+      <p class="text-xs text-slate-300 mb-3">${t('claroSummaryHint')}</p>
       <div class="grid sm:grid-cols-3 gap-2">
         ${item(t('ifPrice'), r.precio.nombre, `${money(r.precio.copago)} · ~${r.precio.esperaDias}${d}`, '💰')}
         ${item(t('ifQuality'), r.calidad.nombre, `★ ${r.calidad.calidad.toFixed(1)} · ${money(r.calidad.copago)}`, '⭐')}
@@ -572,7 +572,7 @@ function resumenClaro(est) {
 // Botones de contacto por hospital (llamar / como llegar / web). Se abren en pestana nueva.
 function accionesHospital(h) {
   const btns = [];
-  const cls = 'inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/70 border border-white/10 text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition';
+  const cls = 'inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-slate-800/70 border border-white/10 text-slate-300 hover:text-teal-300 hover:border-teal-400/40 transition';
   if (h.telefono) {
     btns.push(`<a href="tel:${escapeHtml(h.telefono.replace(/\s/g, ''))}" class="${cls}">${t('call')}</a>`);
   }
@@ -611,20 +611,20 @@ function tablaHospitales(est) {
           <div class="min-w-0 flex items-center gap-3">
             ${nota != null ? `<div class="shrink-0 w-11 h-11 rounded-xl bg-slate-800/80 border border-white/10 flex flex-col items-center justify-center">
               <span class="text-sm font-extrabold ${notaColor(nota)} leading-none">${nota.toFixed(1)}</span>
-              <span class="text-[8px] text-slate-500 leading-none">/10</span>
+              <span class="text-[8px] text-slate-300 leading-none">/10</span>
             </div>` : ''}
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-semibold text-sm text-slate-100 truncate">${escapeHtml(h.nombre)}</span>
-                ${esRec ? `<span class="text-[9px] px-1.5 py-0.5 rounded-full bg-teal-400 text-slate-900 font-bold">${t('bestBadge')}</span>` : (nota != null ? `<span class="text-[9px] text-slate-500">${etiquetaValor(nota)}</span>` : '')}
+                ${esRec ? `<span class="text-xs px-1.5 py-0.5 rounded-full bg-teal-400 text-slate-900 font-bold">${t('bestBadge')}</span>` : (nota != null ? `<span class="text-xs text-slate-300">${etiquetaValor(nota)}</span>` : '')}
               </div>
-              <div class="text-[11px] text-slate-500">${escapeHtml(h.zona)} · ★ ${h.calidad.toFixed(1)}${h.esperaDias != null ? ' · ~' + h.esperaDias + 'd' : ''}${h.distanciaKm != null ? ' · ' + h.distanciaKm + ' km' + (h.distanciaReal ? (getLang() === 'en' ? ' from you' : ' de ti') : '') : ''}</div>
-              ${h.direccion ? `<div class="text-[10px] text-slate-600 truncate">${escapeHtml(h.direccion)}</div>` : ''}
+              <div class="text-xs text-slate-300">${escapeHtml(h.zona)} · ★ ${h.calidad.toFixed(1)}${h.esperaDias != null ? ' · ~' + h.esperaDias + 'd' : ''}${h.distanciaKm != null ? ' · ' + h.distanciaKm + ' km' + (h.distanciaReal ? (getLang() === 'en' ? ' from you' : ' de ti') : '') : ''}</div>
+              ${h.direccion ? `<div class="text-xs text-slate-400 truncate">${escapeHtml(h.direccion)}</div>` : ''}
             </div>
           </div>
           <div class="text-right shrink-0">
             <div class="font-bold text-sm ${esRec ? 'text-teal-300' : 'text-slate-200'}">${money(h.copago)}</div>
-            <div class="text-[10px] text-slate-500">${getLang() === 'en' ? 'rate' : 'tarifa'} ${money(h.tarifa)}</div>
+            <div class="text-xs text-slate-300">${getLang() === 'en' ? 'rate' : 'tarifa'} ${money(h.tarifa)}</div>
           </div>
         </div>
         ${accionesHospital(h)}
