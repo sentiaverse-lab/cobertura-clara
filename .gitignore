@@ -10,3 +10,8 @@ _e2e*.txt
 _e2e*.js
 _ping_*.*
 _c.txt
+_sec*.js
+_graph_log.txt
+
+# Grafo de conocimiento (regenerable, pesado)
+graphify-out/
