@@ -622,14 +622,17 @@ function resumenClaro(est) {
         <div class="text-xs text-slate-300">${detalle}</div>
       </div>
     </div>`;
-  const d = getLang() === 'en' ? 'd wait' : 'd';
+  const espera = (n) => getLang() === 'en'
+    ? `appt. in ~${n} ${n === 1 ? 'day' : 'days'}`
+    : `cita en ~${n} ${n === 1 ? 'día' : 'días'}`;
+  const estrellas = getLang() === 'en' ? 'quality' : 'calidad';
   return `
     <div class="rounded-2xl p-4 bg-slate-900/50 border border-white/10">
       <p class="text-sm font-semibold text-slate-200 mb-1">${t('claroSummary')}</p>
       <p class="text-xs text-slate-300 mb-3">${t('claroSummaryHint')}</p>
       <div class="grid sm:grid-cols-3 gap-2">
-        ${item(t('ifPrice'), r.precio.nombre, `${money(r.precio.copago)} · ~${r.precio.esperaDias}${d}`, '💰')}
-        ${item(t('ifQuality'), r.calidad.nombre, `★ ${r.calidad.calidad.toFixed(1)} · ${money(r.calidad.copago)}`, '⭐')}
+        ${item(t('ifPrice'), r.precio.nombre, `${money(r.precio.copago)} · ${espera(r.precio.esperaDias)}`, '💰')}
+        ${item(t('ifQuality'), r.calidad.nombre, `${estrellas} ★ ${r.calidad.calidad.toFixed(1)} · ${money(r.calidad.copago)}`, '⭐')}
         ${item(t('bestBalance') + ' (CLARO ' + r.balance.nota.toFixed(1) + ')', r.balance.nombre, `${money(r.balance.copago)}`, '⚖️')}
       </div>
     </div>`;
@@ -684,7 +687,7 @@ function tablaHospitales(est) {
                 <span class="font-semibold text-sm text-slate-100 truncate">${escapeHtml(h.nombre)}</span>
                 ${esRec ? `<span class="text-xs px-1.5 py-0.5 rounded-full bg-teal-400 text-slate-900 font-bold">${t('bestBadge')}</span>` : (nota != null ? `<span class="text-xs text-slate-300">${etiquetaValor(nota)}</span>` : '')}
               </div>
-              <div class="text-xs text-slate-300">${escapeHtml(h.zona)} · ★ ${h.calidad.toFixed(1)}${h.esperaDias != null ? ' · ~' + h.esperaDias + 'd' : ''}${h.distanciaKm != null ? ' · ' + h.distanciaKm + ' km' + (h.distanciaReal ? (getLang() === 'en' ? ' from you' : ' de ti') : '') : ''}</div>
+              <div class="text-xs text-slate-300">${escapeHtml(h.zona)} · ★ ${h.calidad.toFixed(1)}${h.esperaDias != null ? (getLang() === 'en' ? ' · appt. in ~' + h.esperaDias + (h.esperaDias === 1 ? ' day' : ' days') : ' · cita en ~' + h.esperaDias + (h.esperaDias === 1 ? ' día' : ' días')) : ''}${h.distanciaKm != null ? ' · ' + h.distanciaKm + ' km' + (h.distanciaReal ? (getLang() === 'en' ? ' from you' : ' de ti') : '') : ''}</div>
               ${h.direccion ? `<div class="text-xs text-slate-400 truncate">${escapeHtml(h.direccion)}</div>` : ''}
             </div>
           </div>
